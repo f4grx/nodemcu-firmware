@@ -59,16 +59,32 @@ static int read_hall_sensor( lua_State *L )
   return 1;
 }
 
+static int adc_get_cal( lua_State *L)
+{
+  int adc_id = luaL_checkinteger( L, 1 );
+  MOD_CHECK_ID( adc, adc_id );
+  int atten = luaL_checkinteger( L, 2 );  
+  int width = luaL_checkinteger( L, 3 );  
+
+  int val_type = platform_adc_get_cal(adc_id, atten, width);
+  lua_pushinteger( L, ( lua_Integer ) val_type );
+  return 1;
+}
+
 // Module function map
 LROT_BEGIN(adc)
   LROT_FUNCENTRY( setwidth,         adc_set_width )
   LROT_FUNCENTRY( setup,            adc_setup )
   LROT_FUNCENTRY( read,             adc_read )
   LROT_FUNCENTRY( read_hall_sensor, read_hall_sensor )
+  LROT_FUNCENTRY( get_cal,          adc_get_cal )
   LROT_NUMENTRY ( ATTEN_0db,        PLATFORM_ADC_ATTEN_0db )
   LROT_NUMENTRY ( ATTEN_2_5db,      PLATFORM_ADC_ATTEN_2_5db )
   LROT_NUMENTRY ( ATTEN_6db,        PLATFORM_ADC_ATTEN_6db )
   LROT_NUMENTRY ( ATTEN_11db,       PLATFORM_ADC_ATTEN_11db )
+  LROT_NUMENTRY ( CAL_VREF,         PLATFORM_ADC_CAL_VREF )
+  LROT_NUMENTRY ( CAL_TWOPOINT,     PLATFORM_ADC_CAL_TWOPOINT )
+  LROT_NUMENTRY ( CAL_DEFAULT,      PLATFORM_ADC_CAL_DEFAULT )
   LROT_NUMENTRY ( ADC1,             1 )
 LROT_END(adc, NULL, 0)
 

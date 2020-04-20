@@ -8,6 +8,7 @@
 
 #include "lua.h"
 
+#include "esp_adc_cal.h"
 #include "esp_log.h"
 
 int platform_init (void)
@@ -481,6 +482,30 @@ int platform_adc_read( uint8_t adc, uint8_t channel ) {
   int value = -1;
   if (adc == 1) value = adc1_get_raw( channel );
   return value;
+}
+
+int platform_adc_get_cal(uint8_t adc, uint8_t atten, uint8_t width) {
+  esp_adc_cal_characteristics_t adc_chars;
+  esp_adc_cal_value_t val_type;
+
+  if(adc != 1) {
+    return -1;
+  }
+
+#define DEFAULT_VREF    1100        //Use adc2_vref_to_gpio() to obtain a better estimate
+  val_type = esp_adc_cal_characterize(adc, atten, width, DEFAULT_VREF, &adc_chars);
+  //Check type of calibration value used to characterize ADC
+  if (val_type == ESP_ADC_CAL_VAL_EFUSE_VREF) {
+    printf("ADC CAL: eFuse Vref");
+    return PLATFORM_ADC_CAL_VREF;
+  } else if (val_type == ESP_ADC_CAL_VAL_EFUSE_TP) {
+    printf("ADC CAL: Two Point");
+    return PLATFORM_ADC_CAL_TWOPOINT;
+  } else {
+    printf("ADC CAL: Default");
+    return PLATFORM_ADC_CAL_DEFAULT;
+  }
+  return -1; //Should not be reached
 }
 
 int platform_adc_read_hall_sensor( ) {

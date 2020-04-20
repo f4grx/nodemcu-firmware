@@ -37,11 +37,19 @@
 // divider to generate 100ns base period from 80MHz APB clock
 #define WS2812_CLKDIV (100 * 80 /1000)
 // bit H & L durations in multiples of 100ns
+#if 1
 #define WS2812_DURATION_T0H 4
 #define WS2812_DURATION_T0L 7
 #define WS2812_DURATION_T1H 8
 #define WS2812_DURATION_T1L 6
 #define WS2812_DURATION_RESET (50000 / 100)
+#else
+#define WS2812_DURATION_T0H 3
+#define WS2812_DURATION_T0L 9
+#define WS2812_DURATION_T1H 6
+#define WS2812_DURATION_T1L 6
+#define WS2812_DURATION_RESET (80000 / 100)
+#endif
 
 // 0 bit in rmt encoding
 const rmt_item32_t ws2812_rmt_bit0 = {
@@ -58,7 +66,7 @@ const rmt_item32_t ws2812_rmt_bit1 = {
   .duration1 = WS2812_DURATION_T1L
 };
 
-#define ws2812_rmt_reset {.level0 = 0, .duration0 = 4, .level1 = 0, .duration1 = 4}
+#define ws2812_rmt_reset {.level0 = 0, .duration0 = 8, .level1 = 0, .duration1 = 8}
 // reset signal, spans one complete buffer block
 const rmt_item32_t ws2812_rmt_reset_block[64] = { [0 ... 63] = ws2812_rmt_reset };
 

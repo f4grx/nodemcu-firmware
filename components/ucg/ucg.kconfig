@@ -16,6 +16,11 @@ config UCG_DISPLAY_ILI9341_18X240X320
        bool "ili9341_18x240x320_hw_spi"
        default "y"
 
+config UCG_DISPLAY_ILI9341_18X320X240
+       depends on LUA_MODULE_SPI
+       bool "ili9341_18x320x240_hw_spi"
+       default "n"
+
 config UCG_DISPLAY_ILI9486_18X320X480
        depends on LUA_MODULE_SPI
        bool "ili9486_18x320x480_hw_spi"

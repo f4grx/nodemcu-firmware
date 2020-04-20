@@ -143,12 +143,18 @@ int platform_adc_channel_exists( uint8_t adc, uint8_t channel );
 uint8_t platform_adc_set_width( uint8_t adc, int bits );
 uint8_t platform_adc_setup( uint8_t adc, uint8_t channel, uint8_t attn );
 int platform_adc_read( uint8_t adc, uint8_t channel );
+int platform_adc_get_cal(uint8_t adc, uint8_t atten, uint8_t width);
 int platform_adc_read_hall_sensor( );
 enum {
     PLATFORM_ADC_ATTEN_0db   = 0,
     PLATFORM_ADC_ATTEN_2_5db = 1,
     PLATFORM_ADC_ATTEN_6db   = 2,
     PLATFORM_ADC_ATTEN_11db  = 3,
+};
+enum {
+    PLATFORM_ADC_CAL_VREF     = 0,
+    PLATFORM_ADC_CAL_TWOPOINT = 1,
+    PLATFORM_ADC_CAL_DEFAULT  = 2,
 };
 
 // *****************************************************************************
